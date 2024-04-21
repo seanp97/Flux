@@ -467,7 +467,7 @@ There are a few validation methods on the Validator class
 
 ## Hashing & Salt
 
-Flux has a built in hash class which hashes a string with salt. Salt in options should be changed.
+Flux has a built in hash class which hashes a string with salt. Salt in options should be changed. By default we are using SHA256.
 
 	class  Hasher  {
 
