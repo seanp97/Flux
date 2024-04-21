@@ -68,15 +68,15 @@ function LoadPartial($name) {
     }
 }
 
-function RenderJSON($query) {
+function RenderJSON($data) {
 
     try {
         header('Content-Type: application/json');
 
         $arr = array();
 
-        if($query) {
-            foreach ($query as $a) {
+        if($data) {
+            foreach ($data as $a) {
                 array_push($arr, $a);
             } 
 
