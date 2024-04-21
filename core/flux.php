@@ -334,16 +334,16 @@ class Flux {
 
     function stored_proc($sp, $params = null) {
         if(!$params) {
-        $stmt = $this->pdo->prepare("CALL $sp");
-        $stmt->execute();
-        return $stmt;
+            $stmt = $this->pdo->prepare("CALL $sp");
+            $stmt->execute();
+            return $stmt;
         }
 
         else {
-        $stmt = $this->pdo->prepare("CALL $sp($params)");
-        $stmt->bindParam(':param1', $params, PDO::PARAM_STR);
-        $stmt->execute();
-        return $stmt;
+            $stmt = $this->pdo->prepare("CALL $sp($params)");
+            $stmt->bindParam(':param1', $params, PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt;
         }
     }
 
