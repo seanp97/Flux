@@ -2,16 +2,16 @@
 require './autoload.php';
 
 Http::get("/", function() {
-    $Home = new HomeController();
+    $User = new UserController();
     $id = QueryString('id');
 
     if(!$id) {
         // Get All People
-        $Home->GetAllUsers();
+        $User->GetAllUsers();
     }
     else {
         // Get Single Person
-        $Home->GetUser($id);
+        $User->GetUser($id);
     }
 });
 
