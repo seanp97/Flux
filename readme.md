@@ -252,8 +252,8 @@ Flux has a number of helpful functions we can utilize. Here is the list:
 
 > Includes the footer.php located in the 'base' folder  - 0 arguments
 
-	LoadPartial(); 
-> Loads in any partial located in the 'partials' folder. - 0 arguments
+	LoadPartial($name); 
+> Loads in any partial located in the 'partials' folder. - 1 argument
 
 	RenderJSON($data);
 	
