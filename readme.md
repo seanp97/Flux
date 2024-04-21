@@ -464,3 +464,19 @@ There are a few validation methods on the Validator class
 
 	StringCompare($str1,  $str2)
 	Returns true/false is 2 strings are equal
+
+## Hashing & Salt
+
+Flux has a built in hash class which hashes a string with salt. Salt in options should be changed.
+
+	class  Hasher  {
+
+		private  static  $options  =  [
+			"salt"  =>  "abcdef12345",
+		];
+
+		public  static  function  Hash($str)  {
+			return  hash('sha256',  $str  .  Hasher::$options['salt']);
+		}
+
+	}
