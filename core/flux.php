@@ -40,7 +40,7 @@ class Flux {
         }
     }
 
-    public function query($query, $params = null) {
+    public function Query($query, $params = null) {
         try {
             if (!$params) {
                 $stmt = $this->pdo->query($query);
@@ -55,16 +55,16 @@ class Flux {
         }
     }
 
-  function Select($values = '') {
-    if(!empty($values)) {
-        $this->queryBuilder .= "SELECT $values";
+    function Select($values = '') {
+        if(!empty($values)) {
+            $this->queryBuilder .= "SELECT $values";
+        }
+        else {
+            $this->queryBuilder .= "SELECT";
+        }
+        
+        return $this;
     }
-    else {
-        $this->queryBuilder .= "SELECT";
-    }
-    
-    return $this;
-  }
 
     function All($table) {
         $this->queryBuilder .= "SELECT * FROM $table";
