@@ -38,5 +38,4 @@ Http::post('/update-table', function() {
     $User->MigrateTable('User', function() {
         echo Success('User table updated');
     });
-
 });

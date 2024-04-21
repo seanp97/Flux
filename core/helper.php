@@ -1,6 +1,6 @@
 <?php
 
-function base_url(){
+function BaseURL(){
     $currentURL = "$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
     $position = strrpos($currentURL, '/');
