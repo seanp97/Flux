@@ -377,7 +377,7 @@ Inside the core Flux class, there are some methods to help with interacting with
 	Delete()
 > Delete from table
 
-	All('User')->Where('UserName')->Exec()
+	All('User')->Where('UserName')->Equals('John')->Exec()
 > Get data where
 
 	All('User')->Where('UserName')->Like('John')->Exec()
