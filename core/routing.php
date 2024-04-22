@@ -20,13 +20,7 @@ class Http {
 
                     if($path == $uri) {
                         if($cb) {
-                            if($queryString) {
-                                $cb($paramVal);
-                            }
-                            else {
-                                $cb();
-                            }
-                            
+                            $cb($paramVal);
                         }
                     }
                 }
