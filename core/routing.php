@@ -2,24 +2,48 @@
 
 class Http {
 
+    private static function HandleRequest($path, $request, $cb) {
+        try {
+            if (isset($_SERVER['REQUEST_METHOD'])) {
+                if ($_SERVER['REQUEST_METHOD'] === "$request") {
+
+                    $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
+                    $uri = Explode('/', $uri);
+                    $uri = $uri[count($uri) - 1];
+                    $uri = '/' . $uri;
+    
+                    if($path == $uri) {
+                        if($cb) {
+                            $cb();
+                        }
+                    }
+                }
+            }
+        }
+        catch(Exception $e) {
+            echo $e;
+        }
+    }
+
     static function path($path, $file) {
         try {
-            $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
-            $uri = Explode('/', $uri);
-            $uri = $uri[count($uri) - 1];
-            $uri = '/' . $uri;
-
-            if(str_contains($file, 'views')) {
-                if($uri == $path) {
-                    require $file;
+            if (isset($_SERVER['REQUEST_METHOD'])) {
+                $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
+                $uri = Explode('/', $uri);
+                $uri = $uri[count($uri) - 1];
+                $uri = '/' . $uri;
+    
+                if(str_contains($file, 'views')) {
+                    if($uri == $path) {
+                        require $file;
+                    }
+                }
+                else {
+                    if($uri == $path) {
+                        require 'views/' . $file;
+                    }
                 }
             }
-            else {
-                if($uri == $path) {
-                    require 'views/' . $file;
-                }
-            }
-            
         }
         catch(Exception $e) {
             echo $e;
@@ -27,107 +51,22 @@ class Http {
     }
 
     static function get($path, $cb = false) {
-        try {
-            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-
-                $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
-                $uri = Explode('/', $uri);
-                $uri = $uri[count($uri) - 1];
-                $uri = '/' . $uri;
-
-                if($path == $uri) {
-                    if($cb) {
-                        $cb();
-                    }
-                }
-            }
-        }
-        catch(Exception $e) {
-            echo $e;
-        }
+        self::HandleRequest($path, 'GET', $cb);
     }
 
     static function post($path, $cb = false) {
-        try {
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-                $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
-                $uri = Explode('/', $uri);
-                $uri = $uri[count($uri) - 1];
-                $uri = '/' . $uri;
-
-                if($path == $uri) {
-                    if($cb) {
-                        $cb();
-                    }
-                }
-            }
-        }
-        catch(Exception $e) {
-            echo $e;
-        }
+        self::HandleRequest($path, 'POST', $cb);
     }
 
     static function put($path, $cb = false) {
-        try {
-            if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
-
-                $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
-                $uri = Explode('/', $uri);
-                $uri = $uri[count($uri) - 1];
-                $uri = '/' . $uri;
-
-                if($path == $uri) {
-                    if($cb) {
-                        $cb();
-                    }
-                }
-            }
-        }
-        catch(Exception $e) {
-            echo $e;
-        }
+        self::HandleRequest($path, 'PUT', $cb);
     }
 
     static function delete($path, $cb = false) {
-        try {
-            if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-
-                $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
-                $uri = Explode('/', $uri);
-                $uri = $uri[count($uri) - 1];
-                $uri = '/' . $uri;
-
-                if($path == $uri) {
-                    if($cb) {
-                        $cb();
-                    }
-                }
-            }
-        }
-        catch(Exception $e) {
-            echo $e;
-        }
+        self::HandleRequest($path, 'DELETE', $cb);
     }
 
     static function patch($path, $cb = false) {
-        try {
-            if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
-
-                $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
-                $uri = Explode('/', $uri);
-                $uri = $uri[count($uri) - 1];
-                $uri = '/' . $uri;
-
-                if($path == $uri) {
-                    if($cb) {
-                        $cb();
-                    }
-                }
-            }
-        }
-        catch(Exception $e) {
-            echo $e;
-        }
+        self::HandleRequest($path, 'PATCH', $cb);
     }
 }
