@@ -34,7 +34,8 @@ Http::post("/edit-user", function() {
 
 Http::post('/update-table', function() {
     $User = new Flux();
-
+    
+    // Create User table
     $User->MigrateTable('User', function() {
         echo Success('User table updated');
     });
