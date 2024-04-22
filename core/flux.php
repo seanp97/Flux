@@ -245,6 +245,17 @@ class Flux {
         }
     }
 
+
+    private function MapData($data) {
+        $mappedData = array();
+        
+        foreach($data as $d) {
+            $mappedData[] = (object) $d;
+        }
+        
+        return $mappedData;
+    }
+
     function Exec() {
         try {
             $stmt = $this->pdo->prepare($this->queryBuilder);
@@ -257,11 +268,11 @@ class Flux {
 
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            if (count($data) == 1) {
+            if (count($this->MapData($data)) == 1) {
                 return $data[0];
             }
 
-            return $data;
+            return $this->MapData($data);
         } catch (PDOException $e) {
             throw new Exception("Error querying database: " . $e->getMessage());
         }
