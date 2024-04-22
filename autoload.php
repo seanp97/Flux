@@ -2,7 +2,7 @@
 
 function twister_autoload() {
     
-    $folders = array("core", "controllers", "models", "");
+    $folders = array("core", "controllers", "models", "config", "");
 
     foreach ($folders as $folder) {
         $directory = __DIR__ . '/' . $folder . '/';
