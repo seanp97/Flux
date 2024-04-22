@@ -9,7 +9,11 @@ class UserController {
 
     public function GetAllUsers() {
         try {
-            $users = $this->db->All('User')->Exec();
+
+            $UserModel = new User();
+            $users = $UserModel->All();
+
+            // $users = $this->db->All('User')->Exec();
 
             if($users) {
                 RenderJSON($users);
