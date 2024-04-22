@@ -236,6 +236,29 @@ As you can see, we are calling the methods from out Controller class. We simply 
 
 As you can see, all the methods being called in the router file, are all created in the controller.
 
+
+## Outputting Data
+
+Don't want to output the data as JSON? Flux has you covered. The model is mapped the table.
+
+		public  function  GetAllUsers()  {
+			try  {
+				$users  =  $this->db->All('User')->Exec();
+				
+				if($users)  {
+					foreach($users as $user)  {
+						echo $user->UserName;
+						echo $user->Email;
+					}
+				}
+
+				else  {
+					NotFound('No Data');
+					Status404();
+				}
+
+			}
+
 ## Helper methods
 
 Flux has a number of helpful functions we can utilize. Here is the list:
@@ -252,8 +275,8 @@ Flux has a number of helpful functions we can utilize. Here is the list:
 
 > Includes the footer.php located in the 'base' folder  - 0 arguments
 
-	LoadPartial($name); 
-> Loads in any partial located in the 'partials' folder. - 1 argument
+	LoadPartial(); 
+> Loads in any partial located in the 'partials' folder. - 0 arguments
 
 	RenderJSON($data);
 	
