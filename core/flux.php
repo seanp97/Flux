@@ -245,7 +245,6 @@ class Flux {
         }
     }
 
-
     private function MapData($data) {
         $mappedData = array();
         
@@ -268,8 +267,8 @@ class Flux {
 
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            if (count($this->MapData($data)) == 1) {
-                return $data[0];
+            if (count($data) == 1) {
+                return $this->MapData($data[0]);
             }
 
             return $this->MapData($data);
