@@ -231,19 +231,19 @@ class Flux {
     
             foreach ($properties as $property) {
                 $propertyName = $property->getName();
-                if (isset($_POST[$propertyName])) {
-                    $object->$propertyName = $_POST[$propertyName];
+                if (isset($_POST[$propertyName]) && !empty($_POST[$propertyName])) {
+                    $value = $_POST[$propertyName];
+                    $sanitizedValue = filter_var($value, FILTER_SANITIZE_STRING);
+                    $object->$propertyName = $sanitizedValue;
                 }
             }
     
             return $object;
-    
         } catch (ReflectionException $e) {
-            echo "ReflectionException: " . $e->getMessage();
-        } catch (Exception $e) {
-            echo "Exception: " . $e->getMessage();
+            throw new Exception("ReflectionException: " . $e->getMessage());
         }
     }
+    
 
     private function MapData($data) {
         $mappedData = array();

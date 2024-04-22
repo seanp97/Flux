@@ -15,6 +15,11 @@ Http::get("/", function() {
     }
 });
 
+Http::post('/test', function() {
+    $User = new UserController();
+    $User->Test();
+});
+
 Http::get('/about', function() {
     $About = new AboutController();
     $About->index();
@@ -36,7 +41,7 @@ Http::post('/update-table', function() {
     $User = new Flux();
     
     // Create User table
-    $User->MigrateTable('User', function() {
+    $User->MigrateTable('Person', function() {
         echo Success('User table updated');
     });
 });

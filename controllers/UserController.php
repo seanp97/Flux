@@ -7,6 +7,20 @@ class UserController {
         $this->db = new Flux();
     }
 
+    public function AddNewUser() {
+        try {
+            $user = $this->db->GetModelData('User');
+            $user->Password = Hasher::hash($user->Password);
+        
+            $newUser = new User(null, $user->UserName, $user->Email, $user->Password);
+            $newUser->Insert($newUser);
+        }
+        catch(Exeption $e) {
+            Error($e);
+        }
+
+    }
+
     public function GetAllUsers() {
         try {
 
@@ -54,6 +68,8 @@ class UserController {
     }
 
     public function CreateUser() {
+        // This is a different version of above AddNewUser
+
         try {
             $user = $this->db->GetModelData('User');
             $newUser = new User(null, $user->UserName, $user->Email, Hasher::Hash($user->Password));
