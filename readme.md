@@ -239,25 +239,26 @@ As you can see, all the methods being called in the router file, are all created
 
 ## Outputting Data
 
-Don't want to output the data as JSON? Flux has you covered. The model is mapped the table.
+Don't want to output the data as JSON? Flux has you covered. The model is mapped to the table.
 
-		public  function  GetAllUsers()  {
-			try  {
-				$users  =  $this->db->All('User')->Exec();
-				
-				if($users)  {
-					foreach($users as $user)  {
-						echo $user->UserName;
-						echo $user->Email;
-					}
+	public  function  GetAllUsers()  {
+		try  {
+			$users  =  $this->db->All('User')->Exec();
+			
+			if($users)  {
+				foreach($users as $user)  {
+					echo $user->UserName;
+					echo $user->Email;
 				}
-
-				else  {
-					NotFound('No Data');
-					Status404();
-				}
-
 			}
+
+			else  {
+				NotFound('No Data');
+				Status404();
+			}
+
+		}
+	}
 
 ## Helper methods
 
