@@ -15,9 +15,9 @@ Http::get("/", function() {
     }
 });
 
-Http::post('/test', function() {
+Http::post('/add-user', function() {
     $User = new UserController();
-    $User->Test();
+    $User->AddNewUser();
 });
 
 Http::get('/about', function() {

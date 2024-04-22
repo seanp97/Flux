@@ -25,10 +25,12 @@ class ModelLoad {
         $values = "'" . implode("', '", array_values($properties)) . "'";
     
         $sql = "INSERT INTO $callingClass ($columns) VALUES ($values)";
-        echo $sql;
-        
-        // Execute the SQL query
-        $db->Query($sql);
+
+        $stmt = $db->Query($sql);
+
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $data;
     }
     
     
