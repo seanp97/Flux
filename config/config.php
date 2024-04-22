@@ -7,4 +7,8 @@ class Configuration {
         "password" => "",
         "database" => ""
     ];
+
+    public static function AccessControlAllowOrigin($cors = "null") {
+        header("Access-Control-Allow-Origin: $cors");
+    }
 }
