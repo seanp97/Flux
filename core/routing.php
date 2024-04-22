@@ -11,10 +11,22 @@ class Http {
                     $uri = Explode('/', $uri);
                     $uri = $uri[count($uri) - 1];
                     $uri = '/' . $uri;
-    
+
+                    $queryString = $_SERVER['QUERY_STRING'];
+
+                    parse_str($queryString, $params);
+
+                    $paramVal = reset($params);
+
                     if($path == $uri) {
                         if($cb) {
-                            $cb();
+                            if($queryString) {
+                                $cb($paramVal);
+                            }
+                            else {
+                                $cb();
+                            }
+                            
                         }
                     }
                 }
@@ -22,6 +34,16 @@ class Http {
         }
         catch(Exception $e) {
             echo $e;
+        }
+    }
+
+    private static function ExtractQueryStringValue($queryString) {
+        parse_str($queryString, $params);
+    
+        if (!empty($params)) {
+            return reset($params);
+        } else {
+            return null;
         }
     }
 

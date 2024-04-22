@@ -40,6 +40,10 @@ class Flux {
         }
     }
 
+    public function QueryBuilder() {
+        return $this->queryBuilder;
+    }
+
     public function Query($query, $params = null) {
         try {
             if (!$params) {
@@ -254,28 +258,31 @@ class Flux {
         
         return $mappedData;
     }
-
+    
     function Exec() {
         try {
             $stmt = $this->pdo->prepare($this->queryBuilder);
             $stmt->execute();
-
+    
             if (str_contains($this->queryBuilder, "COUNT")) {
                 $data = $stmt->fetch(PDO::FETCH_ASSOC);
                 return $data[array_key_first($data)];
             }
-
+    
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+    
             if (count($data) == 1) {
-                return $this->MapData($data[0]);
+                // If there's only one row, map it directly to an object
+                return (object) $data[0];
             }
-
+    
+            // If there are multiple rows, map each row to an object
             return $this->MapData($data);
         } catch (PDOException $e) {
             throw new Exception("Error querying database: " . $e->getMessage());
         }
     }
+    
 
     function From($table) {
         $this->queryBuilder .= " FROM $table";

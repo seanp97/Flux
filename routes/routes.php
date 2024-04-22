@@ -1,9 +1,8 @@
 <?php
 require './autoload.php';
 
-Http::get("/", function() {
+Http::get("/", function($id) {
     $User = new UserController();
-    $id = QueryString('id');
 
     if(!$id) {
         // Get All People
