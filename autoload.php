@@ -1,6 +1,6 @@
 <?php
 
-function twister_autoload() {
+function flux_autoload() {
     
     $folders = array("core", "controllers", "models", "config", "");
 
@@ -13,4 +13,4 @@ function twister_autoload() {
     }
 }
 
-twister_autoload();
+flux_autoload();
