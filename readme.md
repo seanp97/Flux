@@ -143,7 +143,10 @@ As you can see, we are calling the methods from out Controller class. We simply 
 
 		public  function  GetAllUsers()  {
 			try  {
-				$users  =  $this->db->All('User')->Exec();
+				$UserModel = new User();
+				$users = $UserModel->All();
+
+				// $users = $this->db->All('User')->Exec();
 				
 				if($users)  {
 					RenderJSON($users);
