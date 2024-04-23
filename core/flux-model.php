@@ -202,6 +202,12 @@ class FluxModel {
         return new self();
     }
 
+    public static function Select($q) {
+        $callingClass = get_called_class();
+        self::$modelQueryBuilder .= "SELECT $q FROM $callingClass";
+        return new self();
+    }
+
     public static function And($q) {
         self::$modelQueryBuilder .= " AND $q ";
         return new self();
