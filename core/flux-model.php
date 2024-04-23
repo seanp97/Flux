@@ -15,6 +15,31 @@ class FluxModel {
         return $mappedData;
     }
 
+    public static function InsertObject($object, $tableName) {
+        try {
+            $propertyNames = [];
+            $propertyValues = [];
+            foreach ($object as $propertyName => $propertyValue) {
+                $propertyNames[] = $propertyName;
+                $propertyValues[] = $propertyValue;
+            }
+    
+            $columnNames = implode(', ', $propertyNames);
+            $placeholders = rtrim(str_repeat('?, ', count($propertyValues)), ', ');
+    
+            $query = "INSERT INTO $tableName ($columnNames) VALUES ($placeholders)";
+            
+            $db = new Flux();
+            $stmt = $db->pdo->prepare($query);
+            $stmt->execute($propertyValues);
+        } catch (PDOException $e) {
+            echo "PDOException: " . $e->getMessage();
+        } catch (Exception $e) {
+            echo "Exception: " . $e->getMessage();
+        }
+    }
+    
+
     public static function HydratedPostModelData($className) {
         try {
             $reflection = new ReflectionClass($className);

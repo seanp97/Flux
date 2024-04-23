@@ -71,10 +71,9 @@ class UserController {
         // This is a different version of above AddNewUser
 
         try {
-            $user = $this->db->GetModelData('User');
+            $user = User::HydratedPostModelData('User');
             $newUser = new User(null, $user->UserName, $user->Email, Hasher::Hash($user->Password));
-
-            $this->db->InsertObject($newUser, 'User');
+            User::InsertObject($newUser, 'User');
             RenderJSON($user);
             Status200();
         }

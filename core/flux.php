@@ -100,28 +100,6 @@ class Flux {
         return null;
     }
 
-    function InsertObject($object, $tableName) {
-        try {
-            $propertyNames = [];
-            $propertyValues = [];
-            foreach ($object as $propertyName => $propertyValue) {
-                $propertyNames[] = $propertyName;
-                $propertyValues[] = $propertyValue;
-            }
-
-            $columnNames = implode(', ', $propertyNames);
-            $placeholders = rtrim(str_repeat('?, ', count($propertyValues)), ', ');
-
-            $query = "INSERT INTO $tableName ($columnNames) VALUES ($placeholders)";
-            $stmt = $this->pdo->prepare($query);
-            $stmt->execute($propertyValues);
-        } catch (PDOException $e) {
-            echo "PDOException: " . $e->getMessage();
-        } catch (Exception $e) {
-            echo "Exception: " . $e->getMessage();
-        }
-    }
-
     function MigrateTable($className, $cb = false) {
         try {
             $reflection = new ReflectionClass($className);
