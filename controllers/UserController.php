@@ -7,7 +7,7 @@ class UserController {
         $this->db = new Flux();
     }
 
-    public function AddNewUser() {
+    public static function AddNewUser() {
         try {
             $user = User::HydratedPostModelData();
             $user->Password = Hasher::SHA256($user->Password);
@@ -21,7 +21,7 @@ class UserController {
 
     }
 
-    public function GetAllUsers() {
+    public static function GetAllUsers() {
         try {
             $users = User::All()::Exec();
 
@@ -42,7 +42,7 @@ class UserController {
         }
     }
 
-    public function GetUser($id) {
+    public static function GetUser($id) {
         try {
             if($id && Validator::Numeric($id)) {
 
@@ -67,7 +67,7 @@ class UserController {
         }
     }
 
-    public function CreateUser() {
+    public static function CreateUser() {
         // This is a different version of above AddNewUser
 
         try {
@@ -83,7 +83,7 @@ class UserController {
     }
 
 
-    public function EditUser() {
+    public static function EditUser() {
         try {
             $editUserData = User::HydratedPostModelData('User');
             User::Update()::Set('Email')::To($editUserData->Email)::Where('UserId')::Is($editUserData->UserId)::Exec();

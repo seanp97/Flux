@@ -240,16 +240,20 @@ class FluxModel {
     }
 
     public static function Insert($obj) {
-        $db = new Flux();
-        $callingClass = get_class($obj);
-        $properties = get_object_vars($obj);
-        $columns = implode(", ", array_keys($properties));
-        $values = "'" . implode("', '", array_values($properties)) . "'";
-        $sql = "INSERT INTO $callingClass ($columns) VALUES ($values)";
-        $stmt = $db->Query($sql);
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $data;
+        try {
+            $db = new Flux();
+            $callingClass = get_class($obj);
+            $properties = get_object_vars($obj);
+            $columns = implode(", ", array_keys($properties));
+            $values = "'" . implode("', '", array_values($properties)) . "'";
+            $sql = "INSERT INTO $callingClass ($columns) VALUES ($values)";
+            $stmt = $db->Query($sql);
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
     }
+    
 
     public static function Exec() {
         $db = new Flux();

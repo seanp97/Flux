@@ -2,38 +2,33 @@
 require './autoload.php';
 
 Http::get("/", function($id) {
-    $User = new UserController();
 
     if(!$id) {
         // Get All People
-        $User->GetAllUsers();
+        UserController::GetAllUsers();
     }
     else {
         // Get Single Person
-        $User->GetUser($id);
+        UserController::GetUser($id);
     }
 });
 
 Http::post('/add-user', function() {
-    $User = new UserController();
-    $User->AddNewUser();
+    UserController::AddNewUser();
 });
 
 Http::get('/about', function() {
-    $About = new AboutController();
-    $About->index();
+    AboutController::index();
 });
 
 Http::post("/create-user", function() {
-    $User = new UserController();
     // Create Person
-    $User->CreateUser();
+    UserController::CreateUser();
 });
 
 Http::post("/edit-user", function() {
-    $User = new UserController();
     // Create Person
-    $User->EditUser();
+    UserController::EditUser();
 });
 
 Http::post('/update-table', function() {

@@ -2,7 +2,7 @@
 
 class AboutController {
 
-    static function index() {
+    public static function index() {
         // Load index.php file in views/About folder
         view("About/index");
     }
