@@ -86,9 +86,8 @@ class UserController {
 
     public function EditUser() {
         try {
-            $EditUser = new User();
-            $editUserData = $this->db->GetModelData('User');
-            $EditUser->Update()->Set('Email')->To($editUserData->Email)->Where('UserId')->Is($editUserData->UserId)->Exec();
+            $editUserData = User::HydratedPostModelData('User');
+            User::Update()::Set('Email')::To($editUserData->Email)::Where('UserId')::Is($editUserData->UserId)::Exec();
             RenderJSON($editUserData);
             Status200();
         }

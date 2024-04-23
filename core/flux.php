@@ -210,27 +210,6 @@ class Flux {
             $cb();
         }
     }
-
-    function GetModelData($className) {
-        try {
-            $reflection = new ReflectionClass($className);
-            $object = $reflection->newInstanceWithoutConstructor();
-            $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
-    
-            foreach ($properties as $property) {
-                $propertyName = $property->getName();
-                if (isset($_POST[$propertyName]) && !empty($_POST[$propertyName])) {
-                    $value = $_POST[$propertyName];
-                    $sanitizedValue = filter_var($value, FILTER_SANITIZE_STRING);
-                    $object->$propertyName = $sanitizedValue;
-                }
-            }
-    
-            return $object;
-        } catch (ReflectionException $e) {
-            throw new Exception("ReflectionException: " . $e->getMessage());
-        }
-    }
     
 
     private function MapData($data) {
