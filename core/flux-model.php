@@ -38,7 +38,6 @@ class FluxModel {
             echo "Exception: " . $e->getMessage();
         }
     }
-    
 
     public static function HydratedPostModelData() {
         try {
@@ -124,7 +123,6 @@ class FluxModel {
         catch (PDOException $e) {
             echo "Error dropping table: " . $e->getMessage();
         }
-
     }
 
     public static function MigrateTable($cb = false) {
@@ -149,7 +147,6 @@ class FluxModel {
             foreach ($properties as $property) {
                 $propertyName = $property->getName();
                 if ($propertyName === self::FirstProperty($className)) {
-                    // Skip the first property
                     continue;
                 }
                 $propertyType = 'VARCHAR(65530)';
@@ -157,7 +154,6 @@ class FluxModel {
                     $propertyType = self::GetColumnType($property->getType()->getName());
                 }
                 if (!$firstProperty) {
-                    // Add a comma before adding new columns except for the first one
                     $sqlCreate .= ", ";
                 } else {
                     $firstProperty = false;
@@ -253,7 +249,6 @@ class FluxModel {
             return false;
         }
     }
-    
 
     public static function Exec() {
         $db = new Flux();
