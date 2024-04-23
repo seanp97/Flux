@@ -59,22 +59,6 @@ class Flux {
         }
     }
 
-    function Select($values = '') {
-        if(!empty($values)) {
-            $this->queryBuilder .= "SELECT $values";
-        }
-        else {
-            $this->queryBuilder .= "SELECT";
-        }
-        
-        return $this;
-    }
-
-    function All($table) {
-        $this->queryBuilder .= "SELECT * FROM $table";
-        return $this;
-    }
-
     function GetColumnType($phpType) {
         switch ($phpType) {
             case 'int':
@@ -272,82 +256,15 @@ class Flux {
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
             if (count($data) == 1) {
-                // If there's only one row, map it directly to an object
                 return (object) $data[0];
             }
     
-            // If there are multiple rows, map each row to an object
             return $this->MapData($data);
         } catch (PDOException $e) {
             throw new Exception("Error querying database: " . $e->getMessage());
         }
     }
     
-
-    function From($table) {
-        $this->queryBuilder .= " FROM $table";
-        return $this;
-    }
-
-    function InsertInto($table) {
-        $this->queryBuilder .= "INSERT INTO $table";
-        return $this;
-    }
-
-    function Delete() {
-        $this->queryBuilder .= "DELETE";
-        return $this;
-    }
-
-    function Values($values) {
-        $this->queryBuilder .= " VALUES($values)";
-        return $this;
-    }
-
-    function Like($q) {
-        $this->queryBuilder .= " LIKE '%$q%'";
-        return $this;
-    }
-
-    function Update($table) {
-        $this->queryBuilder .= "UPDATE $table";
-        return $this;
-    }
-
-    function Set($value) {
-        $this->queryBuilder .= " SET $value";
-        return $this;
-    }
-
-    function Desc($q) {
-        $this->queryBuilder .= " ORDER BY $q DESC";
-        return $this;
-    }
-
-    function Asc($q) {
-        $this->queryBuilder .= " ORDER BY $q ASC";
-        return $this;
-    }
-
-    function Where($q) {
-        $this->queryBuilder .= " WHERE $q";
-        return $this;
-    }
-
-    function And($q) {
-        $this->queryBuilder .= " AND $q";
-        return $this;
-    }
-
-    function Or($q) {
-        $this->queryBuilder .= " OR $q";
-        return $this;
-    }
-
-    function Equals($e) {
-        $this->queryBuilder .= " = $e";
-        return $this;
-    }
 
     function stored_proc($sp, $params = null) {
         if(!$params) {

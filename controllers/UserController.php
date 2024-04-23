@@ -25,7 +25,7 @@ class UserController {
         try {
 
             $UserModel = new User();
-            $users = $UserModel->All();
+            $users = $UserModel->All()->Exec();
 
             // $users = $this->db->All('User')->Exec();
 
@@ -46,10 +46,12 @@ class UserController {
     public function GetUser($id) {
         try {
             if($id && is_numeric($id)) {
-                $person = $this->db->All('User')->Where('UserId')->Equals("$id")->Exec();
+
+                $UserModel = new User();
+                $user = $UserModel->All()->Where('UserId')->Is("$id")->Exec();
                 
-                if($person) {
-                    RenderJSON($person);
+                if($user) {
+                    RenderJSON($user);
                 }
                 else {
                     NotFound('No Data');
@@ -86,9 +88,10 @@ class UserController {
 
     public function EditUser() {
         try {
-            $user = $this->db->GetModelData('User');
-            $editedUser = $this->db->Update('User')->Set('Email')->Equals("'$user->Email'")->Where('UserId')->Equals("'$user->UserId'")->Exec();
-            RenderJSON($editedUser);
+            $EditUser = new User();
+            $editUserData = $this->db->GetModelData('User');
+            $EditUser->Update()->Set('Email')->To($editUserData->Email)->Where('UserId')->Is($editUserData->UserId)->Exec();
+            RenderJSON($editUserData);
             Status200();
         }
         catch(Exception $e) {

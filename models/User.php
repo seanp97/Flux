@@ -1,6 +1,6 @@
 <?php
 
-class User extends ModelLoad {
+class User extends FluxModel {
     public ?int $UserId = null;
     public string $UserName = '';
     public string $Email = '';
