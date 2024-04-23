@@ -10,7 +10,7 @@ class UserController {
     public function AddNewUser() {
         try {
             $user = $this->db->GetModelData('User');
-            $user->Password = Hasher::hash($user->Password);
+            $user->Password = Hasher::SHA256($user->Password);
         
             $newUser = new User(null, $user->UserName, $user->Email, $user->Password);
             $newUser->Insert($newUser);
@@ -72,7 +72,7 @@ class UserController {
 
         try {
             $user = User::HydratedPostModelData('User');
-            $newUser = new User(null, $user->UserName, $user->Email, Hasher::Hash($user->Password));
+            $newUser = new User(null, $user->UserName, $user->Email, Hasher::SHA1($user->Password));
             User::InsertObject($newUser, 'User');
             RenderJSON($user);
             Status200();
