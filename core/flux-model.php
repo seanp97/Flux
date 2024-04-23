@@ -30,7 +30,7 @@ class FluxModel {
             $query = "INSERT INTO $tableName ($columnNames) VALUES ($placeholders)";
             
             $db = new Flux();
-            $stmt = $db->pdo->prepare($query);
+            $stmt = $db->prepare($query);
             $stmt->execute($propertyValues);
         } catch (PDOException $e) {
             echo "PDOException: " . $e->getMessage();

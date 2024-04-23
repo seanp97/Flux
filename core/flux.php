@@ -3,8 +3,6 @@
 class Flux {
   public $pdo;
 
-  public $queryBuilder;
-
   function __construct() {
       $this->Connect();
   }
@@ -38,10 +36,6 @@ class Flux {
         } catch(PDOException $e) {
             throw new Exception("Error creating database: " . $e->getMessage());
         }
-    }
-
-    public function QueryBuilder() {
-        return $this->queryBuilder;
     }
 
     public function Query($query, $params = null) {
@@ -179,7 +173,6 @@ class Flux {
         }
     }
 
-
     private function UpdateTable($className, $cb = false) {
         $this->DropTable($className);
         $this->MigrateTable($className);
@@ -188,7 +181,6 @@ class Flux {
             $cb();
         }
     }
-    
 
     private function MapData($data) {
         $mappedData = array();
@@ -199,29 +191,6 @@ class Flux {
         
         return $mappedData;
     }
-    
-    function Exec() {
-        try {
-            $stmt = $this->pdo->prepare($this->queryBuilder);
-            $stmt->execute();
-    
-            if (str_contains($this->queryBuilder, "COUNT")) {
-                $data = $stmt->fetch(PDO::FETCH_ASSOC);
-                return $data[array_key_first($data)];
-            }
-    
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-            if (count($data) == 1) {
-                return (object) $data[0];
-            }
-    
-            return $this->MapData($data);
-        } catch (PDOException $e) {
-            throw new Exception("Error querying database: " . $e->getMessage());
-        }
-    }
-    
 
     function stored_proc($sp, $params = null) {
         if(!$params) {

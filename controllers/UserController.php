@@ -23,10 +23,11 @@ class UserController {
 
     public function GetAllUsers() {
         try {
-
             $users = User::All()::Exec();
 
-            // $users = $this->db->All('User')->Exec();
+            // $db = new Flux();
+            // $users = $this->db->Query('SELECT * FROM User')->fetchAll();
+            
 
             if($users) {
                 RenderJSON($users);
