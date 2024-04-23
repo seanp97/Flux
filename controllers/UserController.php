@@ -9,7 +9,7 @@ class UserController {
 
     public function AddNewUser() {
         try {
-            $user = User::HydratedPostModelData('User');
+            $user = User::HydratedPostModelData();
             $user->Password = Hasher::SHA256($user->Password);
         
             $newUser = new User(null, $user->UserName, $user->Email, $user->Password);
@@ -28,7 +28,6 @@ class UserController {
             // $db = new Flux();
             // $users = $this->db->Query('SELECT * FROM User')->fetchAll();
             
-
             if($users) {
                 RenderJSON($users);
             }
@@ -72,7 +71,7 @@ class UserController {
         // This is a different version of above AddNewUser
 
         try {
-            $user = User::HydratedPostModelData('User');
+            $user = User::HydratedPostModelData();
             $newUser = new User(null, $user->UserName, $user->Email, Hasher::SHA1($user->Password));
             User::InsertObject($newUser, 'User');
             RenderJSON($user);

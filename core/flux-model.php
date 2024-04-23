@@ -40,8 +40,9 @@ class FluxModel {
     }
     
 
-    public static function HydratedPostModelData($className) {
+    public static function HydratedPostModelData() {
         try {
+            $className = get_called_class();
             $reflection = new ReflectionClass($className);
             $object = $reflection->newInstanceWithoutConstructor();
             $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
