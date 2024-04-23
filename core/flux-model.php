@@ -1,93 +1,81 @@
-<?php 
+<?php
 
 class FluxModel {
+    private static $modelQueryBuilder = '';
 
-    public $modelQueryBuilder;
-
-    public function QueryBuilder() {
-        return $this->modelQueryBuilder;
+    public static function QueryBuilder() {
+        return new self();
     }
 
-    private function MapData($data) {
+    private static function MapData($data) {
         $mappedData = array();
-        
-        foreach($data as $d) {
+        foreach ($data as $d) {
             $mappedData[] = (object) $d;
         }
-        
         return $mappedData;
     }
 
-    public function All() {
+    public static function All() {
         $callingClass = get_called_class();
-        $callingClass = strval($callingClass);
-        $this->modelQueryBuilder .= "SELECT * FROM $callingClass";
-        return $this;
+        self::$modelQueryBuilder .= "SELECT * FROM $callingClass";
+        return new self();
     }
 
-    public function Where($q) {
-        $this->modelQueryBuilder .= " WHERE $q ";
-        return $this;
+    public static function Where($q) {
+        self::$modelQueryBuilder .= " WHERE $q ";
+        return new self();
     }
 
-    public function And($q) {
-        $this->modelQueryBuilder .= " AND $q ";
-        return $this;
+    public static function And($q) {
+        self::$modelQueryBuilder .= " AND $q ";
+        return new self();
     }
 
-    public function Or($q) {
-        $this->modelQueryBuilder .= " OR $q ";
-        return $this;
+    public static function Or($q) {
+        self::$modelQueryBuilder .= " OR $q ";
+        return new self();
     }
 
-    public function To($q) {
-        $this->modelQueryBuilder .= " = '$q' ";
-        return $this;
+    public static function To($q) {
+        self::$modelQueryBuilder .= " = '$q' ";
+        return new self();
     }
 
-    public function Is($q) { 
-        $this->modelQueryBuilder .= " = '$q' ";
-        return $this;
+    public static function Is($q) {
+        self::$modelQueryBuilder .= " = '$q' ";
+        return new self();
     }
-    
-    public function Update() {
+
+    public static function Update() {
         $callingClass = get_called_class();
-        $callingClass = strval($callingClass);
-        $this->modelQueryBuilder .= "UPDATE $callingClass ";
-        return $this;
+        self::$modelQueryBuilder .= "UPDATE $callingClass ";
+        return new self();
     }
 
-    public function Set($q) {
-        $this->modelQueryBuilder .= "SET $q ";
-        return $this;
+    public static function Set($q) {
+        self::$modelQueryBuilder .= "SET $q ";
+        return new self();
     }
 
-    public function Insert($obj) {
+    public static function Insert($obj) {
         $db = new Flux();
         $callingClass = get_class($obj);
-    
         $properties = get_object_vars($obj);
         $columns = implode(", ", array_keys($properties));
         $values = "'" . implode("', '", array_values($properties)) . "'";
         $sql = "INSERT INTO $callingClass ($columns) VALUES ($values)";
-
         $stmt = $db->Query($sql);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
         return $data;
     }
 
-    public function Exec() {
+    public static function Exec() {
         $db = new Flux();
-        $stmt = $db->Query($this->modelQueryBuilder);
+        $stmt = $db->Query(self::$modelQueryBuilder);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
         if (count($data) == 1) {
             return (object) $data[0];
         }
-        return $this->MapData($data);
+        return self::MapData($data);
     }
-    
-    
 }
-

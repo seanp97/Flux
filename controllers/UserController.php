@@ -24,8 +24,7 @@ class UserController {
     public function GetAllUsers() {
         try {
 
-            $UserModel = new User();
-            $users = $UserModel->All()->Exec();
+            $users = User::All()::Exec();
 
             // $users = $this->db->All('User')->Exec();
 
@@ -47,8 +46,7 @@ class UserController {
         try {
             if($id && is_numeric($id)) {
 
-                $UserModel = new User();
-                $user = $UserModel->All()->Where('UserId')->Is("$id")->Exec();
+                $user = User::All()::Where('UserId')::Is("$id")::Exec();
                 
                 if($user) {
                     RenderJSON($user);
