@@ -30,6 +30,16 @@ class FluxModel {
         return $this;
     }
 
+    public function And($q) {
+        $this->modelQueryBuilder .= " AND $q ";
+        return $this;
+    }
+
+    public function Or($q) {
+        $this->modelQueryBuilder .= " OR $q ";
+        return $this;
+    }
+
     public function To($q) {
         $this->modelQueryBuilder .= " = '$q' ";
         return $this;
