@@ -9,11 +9,11 @@ class UserController {
 
     public function AddNewUser() {
         try {
-            $user = $this->db->GetModelData('User');
+            $user = User::HydratedPostModelData('User');
             $user->Password = Hasher::SHA256($user->Password);
         
             $newUser = new User(null, $user->UserName, $user->Email, $user->Password);
-            $newUser->Insert($newUser);
+            User::Insert($newUser);
         }
         catch(Exeption $e) {
             Error($e);
