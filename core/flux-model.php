@@ -67,6 +67,135 @@ class FluxModel {
         return new self();
     }
 
+    public static function FirstProperty($className) {
+        $reflectionClass = new ReflectionClass($className);
+        $properties = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC);
+
+        foreach ($properties as $property) {
+            $propertyType = $property->getType();
+            if ($propertyType && ($propertyType->getName() === 'int' || $propertyType->getName() === 'integer')) {
+                return $property->getName();
+            }
+        }
+        return null;
+    }
+
+    private static function GetColumnType($phpType) {
+        switch ($phpType) {
+            case 'int':
+            case 'integer':
+                return 'INT';
+            case 'float':
+            case 'double':
+                return 'FLOAT';
+            case 'bool':
+            case 'boolean':
+                return 'BOOLEAN';
+            case 'string':
+                return 'VARCHAR(65530)';
+            case 'datetime':
+                return 'DATETIME';
+            case 'date':
+                return 'DATE';
+            case 'time':
+                return 'TIME';
+            case 'text':
+                return 'TEXT';
+            case 'json':
+                return 'JSON';
+            default:
+                return 'VARCHAR(65530)';
+        }
+    }
+
+    public static function DeleteTable($cb = false) {
+        try {
+            $tableName = get_called_class();
+            $db = new Flux();
+            $sql = "DROP TABLE IF EXISTS $tableName";
+            $stmt = $db->pdo->prepare($sql);
+            $stmt->execute();
+    
+            if($cb) {
+                $cb();
+            }
+        }
+        catch (PDOException $e) {
+            echo "Error dropping table: " . $e->getMessage();
+        }
+
+    }
+
+    public static function MigrateTable($cb = false) {
+        try {
+            $className = get_called_class();
+            $reflection = new ReflectionClass($className);
+            $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
+    
+            $tableName = strtolower($className);
+            $sqlDrop = "DROP TABLE IF EXISTS $tableName";
+            $sqlCreate = "CREATE TABLE $tableName (";
+    
+            if (self::FirstProperty($className) == NULL) {
+                $idColumnName = $className . 'Id';
+                $sqlCreate .= "$idColumnName INT AUTO_INCREMENT PRIMARY KEY, ";
+            } else {
+                $idColumnName = self::FirstProperty($className);
+                $sqlCreate .= "$idColumnName INT AUTO_INCREMENT PRIMARY KEY, ";
+            }
+    
+            $firstProperty = true;
+            foreach ($properties as $property) {
+                $propertyName = $property->getName();
+                if ($propertyName === self::FirstProperty($className)) {
+                    // Skip the first property
+                    continue;
+                }
+                $propertyType = 'VARCHAR(65530)';
+                if ($propertyName !== 'id' && $property->hasType()) {
+                    $propertyType = self::GetColumnType($property->getType()->getName());
+                }
+                if (!$firstProperty) {
+                    // Add a comma before adding new columns except for the first one
+                    $sqlCreate .= ", ";
+                } else {
+                    $firstProperty = false;
+                }
+                $sqlCreate .= "$propertyName $propertyType";
+            }
+    
+            $sqlCreate .= ')';
+    
+            $db = new Flux();
+            $stmtDrop = $db->pdo->prepare($sqlDrop);
+            $stmtDrop->execute();
+    
+            $stmtCreate = $db->pdo->prepare($sqlCreate);
+            $stmtCreate->execute();
+    
+            if ($cb) {
+                $cb();
+            }
+    
+            return true;
+        } catch (PDOException $e) {
+            throw new Exception("Error creating table: " . $e->getMessage());
+        } catch (ReflectionException $e) {
+            throw new Exception("ReflectionException: " . $e->getMessage());
+        } catch (Exception $e) {
+            throw new Exception("Exception: " . $e->getMessage());
+        }
+    }    
+
+    private function UpdateTable($className, $cb = false) {
+        self::DeleteTable($className);
+        self::MigrateTable($className);
+    
+        if ($cb) {
+            $cb();
+        }
+    }
+
     public static function Where($q) {
         self::$modelQueryBuilder .= " WHERE $q ";
         return new self();
