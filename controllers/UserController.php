@@ -44,7 +44,7 @@ class UserController {
 
     public function GetUser($id) {
         try {
-            if($id && is_numeric($id)) {
+            if($id && Validator::Numeric($id)) {
 
                 $user = User::All()::Where('UserId')::Is("$id")::Exec();
                 
