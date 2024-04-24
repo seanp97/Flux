@@ -13,8 +13,13 @@
 <?php 
 
     if($all_users) {
-        foreach($all_users as $user) {
-            echo $user->Email . '</br>';
+        if(is_array($all_users)) {
+            foreach($all_users as $user) {
+                echo $user->Email . '</br>';
+            }
+        }
+        else {
+            echo $all_users->Email;
         }
     }
     else {
