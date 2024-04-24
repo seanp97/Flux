@@ -34,7 +34,7 @@ class UserController {
                 RenderJSON($users);
             }
             else {
-                //NotFound('No Data');
+                NotFound('No Data');
                 Status404();
             }
         }

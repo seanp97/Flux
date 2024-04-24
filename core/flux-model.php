@@ -155,7 +155,7 @@ class FluxModel {
                     continue;
                 }
                 $propertyType = 'VARCHAR(65530)';
-                if ($propertyName !== 'id' && $property->hasType()) {
+                if ($property->hasType()) {
                     $propertyType = self::GetColumnType($property->getType()->getName());
                 }
                 if (!$firstProperty) {
@@ -239,6 +239,17 @@ class FluxModel {
         self::$modelQueryBuilder .= "SET $q ";
         return new self();
     }
+
+    public static function Delete() {
+        try {
+            $className = get_called_class();
+            self::$modelQueryBuilder .= "DELETE FROM $className ";
+            return new self();
+        }
+        catch (Exception $e) {
+            throw new Exception("Error Processing Request", $e->getCode(), $e);
+        }
+    } 
 
     public static function Insert($obj, $cb = false) {
         try {
