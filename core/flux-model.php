@@ -15,7 +15,7 @@ class FluxModel {
         return $mappedData;
     }
 
-    public static function InsertObject($object, $tableName) {
+    public static function InsertObject($object, $tableName, $cb = false) {
         try {
             $propertyNames = [];
             $propertyValues = [];
@@ -30,8 +30,13 @@ class FluxModel {
             $query = "INSERT INTO $tableName ($columnNames) VALUES ($placeholders)";
             
             $db = new Flux();
-            $stmt = $db->prepare($query);
+            $stmt = $db->pdo->prepare($query);
             $stmt->execute($propertyValues);
+
+            if($cb) {
+                $cb();
+            }
+            
         } catch (PDOException $e) {
             echo "PDOException: " . $e->getMessage();
         } catch (Exception $e) {
@@ -235,7 +240,7 @@ class FluxModel {
         return new self();
     }
 
-    public static function Insert($obj) {
+    public static function Insert($obj, $cb = false) {
         try {
             $db = new Flux();
             $callingClass = get_class($obj);
@@ -244,6 +249,10 @@ class FluxModel {
             $values = "'" . implode("', '", array_values($properties)) . "'";
             $sql = "INSERT INTO $callingClass ($columns) VALUES ($values)";
             $stmt = $db->Query($sql);
+
+            if($cb) {
+                $cb();
+            }
             return true;
         } catch (Exception $e) {
             return false;

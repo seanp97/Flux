@@ -1,6 +1,8 @@
 <?php
 
-function view($file) {
+function view($file, $data = []) {
+    extract($data);
+
     if(str_contains($file, 'views')) {
         if(str_contains($file, '.php')) {
             require $file;
@@ -8,16 +10,11 @@ function view($file) {
         else {
             require $file . ".php";
         }
-    }
-    
-    else {
+    } else {
         if(str_contains($file, '.php')) {
             require 'views/' . $file;
-        }
-        else {
+        } else {
             require 'views/' . $file . ".php";
         }
-        
     }
-
 }

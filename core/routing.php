@@ -41,34 +41,34 @@ class Http {
         }
     }
 
-    static function path($path, $file) {
+    static function path($path, $file, $data = []) {
         try {
             if (isset($_SERVER['REQUEST_METHOD'])) {
                 $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
-                $uri = Explode('/', $uri);
-                $uri = $uri[count($uri) - 1];
-                $uri = '/' . $uri;
+                $uri = explode('/', $uri);
+                $uri = '/' . end($uri);
     
-                if(str_contains($file, 'views')) {
-                    if($uri == $path) {
+                if (str_contains($file, 'views')) {
+                    if ($uri == $path) {
+                        extract($data);
                         require $file;
                     }
-                }
-                else {
-                    if($uri == $path) {
+                } else {
+                    if ($uri == $path) {
+                        extract($data);
                         require 'views/' . $file;
                     }
                 }
             }
-        }
-        catch(Exception $e) {
+        } catch (Exception $e) {
             echo $e;
         }
     }
+    
 
-    static function get($path, $cb = false) {
-        self::HandleRequest($path, 'GET', $cb);
-    }
+    static function get($path, $cb = false, $data = []) {
+        self::HandleRequest($path, 'GET', $cb, $data);
+    }    
 
     static function post($path, $cb = false) {
         self::HandleRequest($path, 'POST', $cb);

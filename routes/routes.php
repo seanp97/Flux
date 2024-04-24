@@ -18,7 +18,8 @@ Http::post('/add-user', function() {
 });
 
 Http::get('/about', function() {
-    AboutController::index();
+    $all_users = UserController::GetAllUsers();
+    AboutController::index($all_users);
 });
 
 Http::post("/create-user", function() {

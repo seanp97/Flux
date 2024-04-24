@@ -13,7 +13,9 @@ class UserController {
             $user->Password = Hasher::SHA256($user->Password);
         
             $newUser = new User(null, $user->UserName, $user->Email, $user->Password);
-            User::Insert($newUser);
+            User::Insert($newUser, function() {
+                echo 'Added user';
+            });
         }
         catch(Exeption $e) {
             Error($e);
@@ -32,7 +34,7 @@ class UserController {
                 RenderJSON($users);
             }
             else {
-                NotFound('No Data');
+                //NotFound('No Data');
                 Status404();
             }
         }
