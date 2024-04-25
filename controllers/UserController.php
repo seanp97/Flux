@@ -48,7 +48,8 @@ class UserController {
         try {
             if($id && Validator::Numeric($id)) {
 
-                $user = User::All()::Where('UserId')::Is("$id")::Exec();
+                $user = User::All()::Where('UserId')::Is($id)::Exec();
+                //echo User::QueryBuilder();
                 
                 if($user) {
                     RenderJSON($user);
