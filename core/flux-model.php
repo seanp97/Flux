@@ -51,9 +51,18 @@ class FluxModel {
             $object = $reflection->newInstanceWithoutConstructor();
             $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
     
+            $jsonData = json_decode(file_get_contents('php://input'), true);
+    
             foreach ($properties as $property) {
                 $propertyName = $property->getName();
-                if (isset($_POST[$propertyName]) && !empty($_POST[$propertyName])) {
+                
+                if (isset($jsonData[$propertyName]) && !empty($jsonData[$propertyName])) {
+                    $value = $jsonData[$propertyName];
+                    $sanitizedValue = filter_var($value, FILTER_SANITIZE_STRING);
+                    $object->$propertyName = $sanitizedValue;
+                } 
+                
+                elseif (isset($_POST[$propertyName]) && !empty($_POST[$propertyName])) {
                     $value = $_POST[$propertyName];
                     $sanitizedValue = filter_var($value, FILTER_SANITIZE_STRING);
                     $object->$propertyName = $sanitizedValue;
