@@ -2,6 +2,7 @@
 
 class FluxModel {
     private static $modelQueryBuilder = '';
+    private static $modelQueryParams = [];
 
     public static function QueryBuilder() {
         return new self();
@@ -61,7 +62,7 @@ class FluxModel {
                     $sanitizedValue = filter_var($value, FILTER_SANITIZE_STRING);
                     $object->$propertyName = $sanitizedValue;
                 } 
-                
+
                 elseif (isset($_POST[$propertyName]) && !empty($_POST[$propertyName])) {
                     $value = $_POST[$propertyName];
                     $sanitizedValue = filter_var($value, FILTER_SANITIZE_STRING);
@@ -73,12 +74,6 @@ class FluxModel {
         } catch (ReflectionException $e) {
             throw new Exception("ReflectionException: " . $e->getMessage());
         }
-    }
-
-    public static function All() {
-        $callingClass = get_called_class();
-        self::$modelQueryBuilder .= "SELECT * FROM $callingClass";
-        return new self();
     }
 
     public static function Find($value) {
@@ -227,6 +222,62 @@ class FluxModel {
         }
     }
 
+    public static function Count() {
+        $callingClass = get_called_class();
+        self::$modelQueryBuilder .= "SELECT COUNT(*) FROM $callingClass";
+        return new self();
+    }
+
+    public static function Max($field) {
+        $callingClass = get_called_class();
+        self::$modelQueryBuilder .= "SELECT MAX($field) FROM $callingClass";
+        return new self();
+    }
+
+    public static function Min($field) {
+        $callingClass = get_called_class();
+        self::$modelQueryBuilder .= "SELECT MIN($field) FROM $callingClass";
+        return new self();
+    }
+
+    public static function Sum($field) {
+        $callingClass = get_called_class();
+        self::$modelQueryBuilder .= "SELECT SUM($field) FROM $callingClass";
+        return new self();
+    }
+
+    public static function Avg($field) {
+        $callingClass = get_called_class();
+        self::$modelQueryBuilder .= "SELECT AVG($field) FROM $callingClass";
+        return new self();
+    }
+
+    public static function Like($q) {
+        self::$modelQueryBuilder .= " LIKE '%$q%'";
+        return new self();
+    }
+    
+    public static function All() {
+        $callingClass = get_called_class();
+        self::$modelQueryBuilder .= "SELECT * FROM $callingClass";
+        return new self();
+    }
+
+    public static function OrderBy($field) {
+        self::$modelQueryBuilder .= " ORDER BY $field";
+        return new self();
+    }
+
+    public static function OrderByAsc($field) {
+        self::$modelQueryBuilder .= " ORDER BY $field ASC";
+        return new self();
+    }
+
+    public static function OrderByDesc($field) {
+        self::$modelQueryBuilder .= " ORDER BY $field DESC";
+        return new self();
+    }
+
     public static function Where($q) {
         self::$modelQueryBuilder .= " WHERE $q ";
         return new self();
@@ -235,6 +286,16 @@ class FluxModel {
     public static function Select($q) {
         $callingClass = get_called_class();
         self::$modelQueryBuilder .= "SELECT $q FROM $callingClass";
+        return new self();
+    }
+
+    public static function First() {
+        self::$modelQueryBuilder .= " LIMIT 1 ";
+        return new self();
+    }
+
+    public static function Limit($n) {
+        self::$modelQueryBuilder .= " LIMIT $n ";
         return new self();
     }
 
