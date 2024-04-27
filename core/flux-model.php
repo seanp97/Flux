@@ -45,7 +45,7 @@ class FluxModel {
         }
     }
 
-    public static function HydratedPostModelData() {
+    public static function ModelData() {
         try {
             $className = get_called_class();
             $reflection = new ReflectionClass($className);
