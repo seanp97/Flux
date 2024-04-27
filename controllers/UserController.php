@@ -9,15 +9,15 @@ class UserController {
 
     public static function AddNewUser() {
         try {
-            $user = User::HydratedPostModelData();
+            $user = new User();
+            $user = User::ModelData();
             $user->Password = Hasher::SHA256($user->Password);
         
-            $newUser = new User(null, $user->UserName, $user->Email, $user->Password);
-            User::Insert($newUser, function() {
+            User::Create($user, function() {
                 echo 'Added user';
             });
         }
-        catch(Exeption $e) {
+        catch(Exception $e) {
             Error($e);
         }
 
@@ -74,9 +74,11 @@ class UserController {
         // This is a different version of above AddNewUser
 
         try {
-            $user = User::HydratedPostModelData();
-            $newUser = new User(null, $user->UserName, $user->Email, Hasher::SHA1($user->Password));
-            User::InsertObject($newUser, 'User');
+            $user = new User();
+            $user = User::ModelData();
+            $user->Password = Hasher::SHA256($user->Password);
+            
+            User::InsertObject($user, 'User');
             RenderJSON($user);
             Status200();
         }
@@ -88,7 +90,7 @@ class UserController {
 
     public static function EditUser() {
         try {
-            $editUserData = User::HydratedPostModelData('User');
+            $editUserData = User::ModelData('User');
             User::Update()::Set('Email')::To($editUserData->Email)::Where('UserId')::Is($editUserData->UserId)::Exec();
             RenderJSON($editUserData);
             Status200();

@@ -341,7 +341,7 @@ class FluxModel {
         }
     } 
 
-    public static function Insert($obj, $cb = false) {
+    public static function Create($obj, $cb = false) {
         try {
             $db = new Flux();
             $callingClass = get_class($obj);
