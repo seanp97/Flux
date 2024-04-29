@@ -16,4 +16,14 @@ class Hasher {
     public static function MD5($str) {
         return md5($str . Hasher::$options['salt']);
     }
+
+    public static function GenerateToken($value) {
+        $id = bin2hex(random_bytes(8));
+        $time = microtime(true);
+        $random_value = bin2hex(random_bytes(16));
+        $random_number = mt_rand(0, 100);
+        $combined_string = $id . $time . $random_value . $random_number . $value;
+        $token = hash('sha256', $combined_string);
+        return $token;
+    }
 }
