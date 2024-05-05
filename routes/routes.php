@@ -32,10 +32,10 @@ Http::post("/edit-user", function() {
     UserController::EditUser();
 });
 
-Http::post('/update-table', function() {
+Http::get('/update-table', function() {
     // Create User table
 
-    User::MigrateTable(function() {
+    Person::MigrateTable(function() {
         echo Success('User table updated');
     });
 });

@@ -172,22 +172,24 @@ class FluxModel {
                 $sqlCreate .= "$idColumnName INT AUTO_INCREMENT PRIMARY KEY, ";
             }
     
-            $firstProperty = true;
             foreach ($properties as $property) {
                 $propertyName = $property->getName();
-                if ($propertyName === self::FirstProperty($className)) {
-                    continue;
-                }
                 $propertyType = 'VARCHAR(65530)';
                 if ($property->hasType()) {
                     $propertyType = self::GetColumnType($property->getType()->getName());
                 }
-                if (!$firstProperty) {
-                    $sqlCreate .= ", ";
+
+                if (strpos($propertyName, 'Id') !== false) {
+                    $referencedTableName = strtolower(substr($propertyName, 0, -2)); 
+                    $sqlCreate .= "$propertyName INT, ";
+                    
+                    $sqlCreate .= "FOREIGN KEY ($propertyName) REFERENCES $referencedTableName(${propertyName}) ON DELETE CASCADE ON UPDATE CASCADE, ";
                 } else {
-                    $firstProperty = false;
+                    if ($propertyName !== self::FirstProperty($className)) {
+                        $sqlCreate .= ", ";
+                    }
+                    $sqlCreate .= "$propertyName $propertyType";
                 }
-                $sqlCreate .= "$propertyName $propertyType";
             }
     
             $sqlCreate .= ')';
@@ -211,7 +213,7 @@ class FluxModel {
         } catch (Exception $e) {
             throw new Exception("Exception: " . $e->getMessage());
         }
-    }    
+    }   
 
     private function UpdateTable($className, $cb = false) {
         self::DeleteTable($className);

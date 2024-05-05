@@ -90,6 +90,15 @@ function RenderJSON($data) {
 
 }
 
+function Ok($value = null) {
+    if(!$value) {
+        header("HTTP/1.0 200 OK");
+        return;
+    }
+    RenderJSON($value);
+    header("HTTP/1.0 200 OK");
+}
+
 function Status200() {
     header("HTTP/1.0 200 OK");
 }
@@ -110,11 +119,19 @@ function Status400() {
     header("HTTP/1.0 400 Bad Request");
 }
 
+function BadRequest() {
+    header("HTTP/1.0 400 Bad Request");
+}
+
 function Status401() {
     header("HTTP/1.0 401 Unauthorized Error");
 }
 
 function Status403() {
+    header("HTTP/1.0 403 Forbidden");
+}
+
+function Forbidden() {
     header("HTTP/1.0 403 Forbidden");
 }
 

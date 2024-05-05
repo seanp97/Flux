@@ -31,7 +31,7 @@ class UserController {
             // $users = $this->db->Query('SELECT * FROM User')->fetchAll();
             
             if($users) {
-                RenderJSON($users);
+                Ok($users);
             }
             else {
                 NotFound('No Data');
