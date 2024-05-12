@@ -91,7 +91,7 @@ class UserController {
         try {
             $editUserData = User::ModelData();
             User::Update()::Set('Email')::To($editUserData->Email)::Where('UserId')::Is($editUserData->UserId)::Exec();
-            RenderJSON($editUserData);
+            Ok($editUserData);
             Status200();
         }
         catch(Exception $e) {
