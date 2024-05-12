@@ -47,12 +47,11 @@ class UserController {
     public static function GetUser($id) {
         try {
             if($id && Validator::Numeric($id)) {
-
                 //$user = User::All()::Where('UserId')::Is($id)::Exec();
                 $user = User::Find($id)->Exec();
                 
                 if($user) {
-                    RenderJSON($user);
+                    Ok($user);
                 }
                 else {
                     NotFound('No Data');
