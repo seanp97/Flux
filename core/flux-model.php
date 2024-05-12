@@ -167,27 +167,22 @@ class FluxModel {
     
             foreach ($properties as $property) {
                 $propertyName = $property->getName();
-                $propertyType = 'VARCHAR(65530)';
+                $propertyType = 'TEXT(65530)';
             
-                // Check if it's the first property and it's not an INT
                 if (self::FirstProperty($className) && $propertyName === self::FirstProperty($className) && $propertyType != 'INT') {
                     $idColumnName = $className . 'Id';
                     $sqlCreate .= "$idColumnName INT AUTO_INCREMENT PRIMARY KEY ";
                 }
             
-                // For non-primary key properties
                 if ($propertyName !== self::FirstProperty($className)) {
-                    // Get the property type if it's defined
                     if ($property->hasType()) {
                         $propertyType = self::GetColumnType($property->getType()->getName());
                     }
             
-                    // Add comma separator if it's not the first property
                     if ($propertyName !== self::FirstProperty($className)) {
                         $sqlCreate .= ", ";
                     }
             
-                    // Append the property and its type to the SQL query
                     $sqlCreate .= "$propertyName $propertyType";
                 }
             }

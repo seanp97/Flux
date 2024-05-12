@@ -89,7 +89,7 @@ class UserController {
 
     public static function EditUser() {
         try {
-            $editUserData = User::ModelData('User');
+            $editUserData = User::ModelData();
             User::Update()::Set('Email')::To($editUserData->Email)::Where('UserId')::Is($editUserData->UserId)::Exec();
             RenderJSON($editUserData);
             Status200();
