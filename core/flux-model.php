@@ -163,14 +163,7 @@ class FluxModel {
             $tableName = strtolower($className);
             $sqlDrop = "DROP TABLE IF EXISTS $tableName";
             $sqlCreate = "CREATE TABLE `$tableName` (";
-    
-            if (self::FirstProperty($className) == NULL) {
-                $idColumnName = $className . 'Id';
-                $sqlCreate .= "$idColumnName INT AUTO_INCREMENT PRIMARY KEY, ";
-            } else {
-                //$idColumnName = self::FirstProperty($className);
-                //$sqlCreate .= "$idColumnName INT AUTO_INCREMENT PRIMARY KEY, ";
-            }
+
     
             foreach ($properties as $property) {
                 $propertyName = $property->getName();
@@ -179,17 +172,11 @@ class FluxModel {
                     $propertyType = self::GetColumnType($property->getType()->getName());
                 }
 
-                if (strpos($propertyName, 'Id') !== false) {
-                    $referencedTableName = strtolower(substr($propertyName, 0, -2)); 
-                    $sqlCreate .= "$propertyName INT ";
-                    
-                    //$sqlCreate .= "FOREIGN KEY ($propertyName) REFERENCES $referencedTableName(${propertyName}) ON DELETE CASCADE ON UPDATE CASCADE, ";
-                } else {
-                    if ($propertyName !== self::FirstProperty($className)) {
-                        $sqlCreate .= ", ";
-                    }
-                    $sqlCreate .= "$propertyName $propertyType";
+                if ($propertyName !== self::FirstProperty($className)) {
+                    $sqlCreate .= ", ";
                 }
+                $sqlCreate .= "$propertyName $propertyType";
+                
             }
     
             $sqlCreate .= ')';
