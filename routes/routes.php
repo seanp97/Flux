@@ -35,7 +35,7 @@ Http::post("/edit-user", function() {
 Http::get('/update-table', function() {
     // Create User table
 
-    Person::MigrateTable(function() {
+    User::MigrateTable(function() {
         echo Success('User table updated');
     });
 });
