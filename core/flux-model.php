@@ -193,8 +193,6 @@ class FluxModel {
             }
     
             $sqlCreate .= ')';
-
-            echo $sqlCreate;
     
             $db = new Flux();
             $stmtDrop = $db->pdo->prepare($sqlDrop);
