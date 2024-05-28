@@ -34,7 +34,6 @@ class UserController {
                 Ok($users);
             }
             else {
-                NotFound('No Data');
                 Status404();
             }
         }
@@ -54,12 +53,10 @@ class UserController {
                     Ok($user);
                 }
                 else {
-                    NotFound('No Data');
                     Status404();
                 }
             }
             else {
-                NotFound('No Data');
                 Status404();
             }
         }

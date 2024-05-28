@@ -99,6 +99,60 @@ function Ok($value = null) {
     header("HTTP/1.0 200 OK");
 }
 
+function BadRequest($value = null) {
+    if(!$value) {
+        header("HTTP/1.0 400 Bad Request");
+        return;
+    }
+    RenderJSON($value);
+    header("HTTP/1.0 400 Bad Request");
+}
+
+function NotFound($value = null) {
+    if(!$value) {
+        header("HTTP/1.0 404 Not Found");
+        return;
+    }
+    RenderJSON($value);
+    header("HTTP/1.0 404 Not Found");
+}
+
+function Created($value = null) {
+    if(!$value) {
+        header("HTTP/1.0 201 Created");
+        return;
+    }
+    RenderJSON($value);
+    header("HTTP/1.0 201 Created");
+}
+
+function NoContent($value = null) {
+    if(!$value) {
+        header("HTTP/1.0 204 No Content");
+        return;
+    }
+    RenderJSON($value);
+    header("HTTP/1.0 204 No Content");
+}
+
+function Unauthorized($value = null) {
+    if(!$value) {
+        header("HTTP/1.0 401 Unauthorized");
+        return;
+    }
+    RenderJSON($value);
+    header("HTTP/1.0 401 Unauthorized");
+}
+
+function Forbid($value = null) {
+    if(!$value) {
+        header("HTTP/1.0 403 Forbidden");
+        return;
+    }
+    RenderJSON($value);
+    header("HTTP/1.0 403 Forbidden");
+}
+
 function Status200() {
     header("HTTP/1.0 200 OK");
 }
@@ -116,10 +170,6 @@ function Status302() {
 }
 
 function Status400() {
-    header("HTTP/1.0 400 Bad Request");
-}
-
-function BadRequest() {
     header("HTTP/1.0 400 Bad Request");
 }
 
@@ -161,10 +211,6 @@ function Status($code, $message) {
 
 function Error($message) {
     echo RenderJSON(array('Error' => array('Error' => $message)));
-}
-
-function NotFound($message) {
-    echo RenderJSON(array('Not Found' => array('Not Found' => $message)));
 }
 
 function Success($message) {
