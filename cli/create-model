@@ -1,0 +1,33 @@
+<?php
+if ($argc < 2) {
+    die("Usage: php ./cli/create-model <filename>\n");
+}
+
+$filename = $argv[1];
+
+$content = '<?php 
+
+    class ' . $filename . ' extends FluxModel {
+        public int $Id;
+
+        public function __construct(int $id = null) {
+            $this->Id = $id;
+        }
+    }
+';
+
+// Define the file path
+$filePath = 'models/' . $filename . '.php';
+
+$file = fopen($filePath, 'w');
+
+if ($file === false) {
+    die('Error opening the file.');
+}
+
+fwrite($file, $content);
+
+fclose($file);
+
+echo "File '$filePath' created successfully with the text.\n";
+?>

@@ -1,0 +1,37 @@
+<?php
+if ($argc < 2) {
+    die("Usage: php ./cli/create-controller <filename>\n");
+}
+
+$filename = $argv[1];
+
+$content = '<?php 
+
+    class ' . $filename . 'Controller {
+        private $db;
+
+        function __construct() {
+            $this->db = new Flux();
+        }
+
+        public static function index() {
+            echo "Hello World";
+        }
+    }
+';
+
+// Define the file path
+$filePath = 'controllers/' . $filename . 'Controller.php';
+
+$file = fopen($filePath, 'w');
+
+if ($file === false) {
+    die('Error opening the file.');
+}
+
+fwrite($file, $content);
+
+fclose($file);
+
+echo "File '$filePath' created successfully with the text.\n";
+?>
