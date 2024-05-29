@@ -96,6 +96,28 @@ class FluxModel {
         return new self();
     }   
 
+    public static function FindOne($value) {
+        $callingClass = get_called_class();
+        self::$modelQueryBuilder = "SELECT * FROM $callingClass WHERE ";
+        $properties = get_class_vars($callingClass);
+        $first = true;
+        foreach ($properties as $propertyName => $propertyValue) {
+            if ($propertyName === 'modelQueryBuilder' || $propertyName === 'modelQueryParams') {
+                continue;
+            }
+            if (!$first) {
+                self::$modelQueryBuilder .= " OR ";
+            } else {
+                $first = false;
+            }
+            self::$modelQueryBuilder .= "$propertyName = $value";
+            self::$modelQueryParams[] = $value;
+        }
+
+        self::$modelQueryBuilder .= " LIMIT 1";
+        return new self();
+    } 
+
     public static function FirstProperty($className) {
         $reflectionClass = new ReflectionClass($className);
         $properties = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC);
