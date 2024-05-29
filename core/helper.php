@@ -96,7 +96,7 @@ function Ok($value = null) {
         return;
     }
 
-    if(is_array($value)) {
+    if (is_array($value) || is_object($value)) {
         RenderJSON($value);
         return;
     }
@@ -111,7 +111,7 @@ function BadRequest($value = null) {
         return;
     }
 
-    if(is_array($value)) {
+    if (is_array($value) || is_object($value)) {
         RenderJSON($value);
         return;
     }
@@ -126,7 +126,7 @@ function NotFound($value = null) {
         return;
     }
     
-    if(is_array($value)) {
+    if (is_array($value) || is_object($value)) {
         RenderJSON($value);
         return;
     }
@@ -141,7 +141,7 @@ function Created($value = null) {
         return;
     }
     
-    if(is_array($value)) {
+    if (is_array($value) || is_object($value)) {
         RenderJSON($value);
         return;
     }
@@ -156,7 +156,7 @@ function NoContent($value = null) {
         return;
     }
     
-    if(is_array($value)) {
+    if (is_array($value) || is_object($value)) {
         RenderJSON($value);
         return;
     }
@@ -171,7 +171,7 @@ function Unauthorized($value = null) {
         return;
     }
     
-    if(is_array($value)) {
+    if (is_array($value) || is_object($value)) {
         RenderJSON($value);
         return;
     }
@@ -186,7 +186,7 @@ function Forbid($value = null) {
         return;
     }
     
-    if(is_array($value)) {
+    if (is_array($value) || is_object($value)) {
         RenderJSON($value);
         return;
     }
