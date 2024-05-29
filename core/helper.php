@@ -95,7 +95,13 @@ function Ok($value = null) {
         header("HTTP/1.0 200 OK");
         return;
     }
-    RenderJSON($value);
+
+    if(is_array($value)) {
+        RenderJSON($value);
+        return;
+    }
+    echo $value;
+    
     header("HTTP/1.0 200 OK");
 }
 
@@ -104,7 +110,13 @@ function BadRequest($value = null) {
         header("HTTP/1.0 400 Bad Request");
         return;
     }
-    RenderJSON($value);
+
+    if(is_array($value)) {
+        RenderJSON($value);
+        return;
+    }
+    echo $value;
+
     header("HTTP/1.0 400 Bad Request");
 }
 
@@ -113,7 +125,13 @@ function NotFound($value = null) {
         header("HTTP/1.0 404 Not Found");
         return;
     }
-    RenderJSON($value);
+    
+    if(is_array($value)) {
+        RenderJSON($value);
+        return;
+    }
+    echo $value;
+    
     header("HTTP/1.0 404 Not Found");
 }
 
@@ -122,7 +140,13 @@ function Created($value = null) {
         header("HTTP/1.0 201 Created");
         return;
     }
-    RenderJSON($value);
+    
+    if(is_array($value)) {
+        RenderJSON($value);
+        return;
+    }
+    echo $value;
+    
     header("HTTP/1.0 201 Created");
 }
 
@@ -131,7 +155,13 @@ function NoContent($value = null) {
         header("HTTP/1.0 204 No Content");
         return;
     }
-    RenderJSON($value);
+    
+    if(is_array($value)) {
+        RenderJSON($value);
+        return;
+    }
+    echo $value;
+    
     header("HTTP/1.0 204 No Content");
 }
 
@@ -140,7 +170,13 @@ function Unauthorized($value = null) {
         header("HTTP/1.0 401 Unauthorized");
         return;
     }
-    RenderJSON($value);
+    
+    if(is_array($value)) {
+        RenderJSON($value);
+        return;
+    }
+    echo $value;
+    
     header("HTTP/1.0 401 Unauthorized");
 }
 
@@ -149,7 +185,13 @@ function Forbid($value = null) {
         header("HTTP/1.0 403 Forbidden");
         return;
     }
-    RenderJSON($value);
+    
+    if(is_array($value)) {
+        RenderJSON($value);
+        return;
+    }
+    echo $value;
+    
     header("HTTP/1.0 403 Forbidden");
 }
 

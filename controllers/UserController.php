@@ -34,7 +34,7 @@ class UserController {
                 Ok($users);
             }
             else {
-                Status404();
+                NotFound('No Users found');
             }
         }
         catch(Exception $e) {
@@ -53,7 +53,7 @@ class UserController {
                     Ok($user);
                 }
                 else {
-                    Status404();
+                    NotFound('No User found');
                 }
             }
             else {
