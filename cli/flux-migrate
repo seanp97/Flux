@@ -1,0 +1,127 @@
+<?php
+
+if ($argc < 2) {
+    die("Usage: php /cli/flux-migrate <modelClassName>\n");
+}
+
+$baseDir = realpath(__DIR__ . '/../');
+$fullPath = $baseDir;
+$model = $argv[1];
+
+require_once $fullPath . '/config/config.php';
+require_once $fullPath . '/core/flux.php';
+require_once $fullPath . '/core/flux-model.php';
+
+// Construct the full path to the model file
+$modelPath = $fullPath . '/models/' . $model . '.php';
+
+// Check if the model file exists before requiring it
+if (!file_exists($modelPath)) {
+    die("Error: Model file '$modelPath' not found.\n");
+}
+
+// Include the model file
+require_once $modelPath;
+
+// Check if the class exists after including the file
+if (!class_exists($model)) {
+    die("Error: Class '$model' not found.\n");
+}
+
+function GetColumnType($phpType) {
+    switch ($phpType) {
+        case 'int':
+        case 'integer':
+            return 'INT';
+        case 'float':
+        case 'double':
+            return 'FLOAT';
+        case 'bool':
+        case 'boolean':
+            return 'BOOLEAN';
+        case 'string':
+            return 'TEXT(65535)';
+        case 'datetime':
+            return 'DATETIME';
+        case 'date':
+            return 'DATE';
+        case 'time':
+            return 'TIME';
+        case 'text':
+            return 'TEXT';
+        case 'json':
+            return 'JSON';
+        default:
+            return 'TEXT(65535)';
+    }
+}
+
+function FirstProperty($className) {
+    $reflectionClass = new ReflectionClass($className);
+    $properties = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC);
+
+    foreach ($properties as $property) {
+        $propertyType = $property->getType();
+        if ($propertyType && ($propertyType->getName() === 'int' || $propertyType->getName() === 'integer')) {
+            return $property->getName();
+        }
+    }
+    return null;
+}
+
+try {
+    try {
+
+        $className = $model;
+        $reflection = new ReflectionClass($className);
+        $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
+
+        $tableName = strtolower($className);
+        $sqlDrop = "DROP TABLE IF EXISTS $tableName";
+        $sqlCreate = "CREATE TABLE `$tableName` (";
+
+        foreach ($properties as $property) {
+            $propertyName = $property->getName();
+            $propertyType = 'TEXT(65530)';
+        
+            if (FirstProperty($className) && $propertyName === FirstProperty($className) && $propertyType != 'INT') {
+                $idColumnName = $className . 'Id';
+                $sqlCreate .= "$idColumnName INT AUTO_INCREMENT PRIMARY KEY ";
+            }
+        
+            if ($propertyName !== FirstProperty($className)) {
+                if ($property->hasType()) {
+                    $propertyType = GetColumnType($property->getType()->getName());
+                }
+        
+                if ($propertyName !== FirstProperty($className)) {
+                    $sqlCreate .= ", ";
+                }
+        
+                $sqlCreate .= "$propertyName $propertyType";
+            }
+        }
+               
+
+        $sqlCreate .= ')';
+
+        $db = new Flux();
+        $stmtDrop = $db->pdo->prepare($sqlDrop);
+        $stmtDrop->execute();
+
+        $stmtCreate = $db->pdo->prepare($sqlCreate);
+        $stmtCreate->execute();
+
+        echo $model . " table created";
+
+        return true;
+    } catch (PDOException $e) {
+        throw new Exception("Error creating table: " . $e->getMessage());
+    } catch (ReflectionException $e) {
+        throw new Exception("ReflectionException: " . $e->getMessage());
+    } catch (Exception $e) {
+        throw new Exception("Exception: " . $e->getMessage());
+    }
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
