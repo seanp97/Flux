@@ -2,7 +2,7 @@
 require './autoload.php';
 
 Http::get('/', function() {
-    echo 'Welcome to Flux!';
+   HomeController::index();
 });
 
 Http::get('/api', function() {
