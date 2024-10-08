@@ -2,36 +2,26 @@
 require './autoload.php';
 
 Http::get('/', function() {
-    echo 'Hello World';
+    echo 'Welcome to Flux!';
 });
 
-Http::get('/{id}', function($id) {
-    echo 'The ID: ' . $id;
+Http::get('/api', function() {
+    FactController::index();
 });
 
-Http::post('/add-user', function() {
-    UserController::AddNewUser();
+Http::get('/api/{id}', function($id) {
+    FactController::show($id);
+});
+
+Http::post('/api', function() {
+    FactController::create();
+});
+
+Http::post('/api/{id}', function($id) {
+    FactController::destroy($id);
 });
 
 Http::get('/about', function() {
     $all_users = AboutController::GetUserAbout();
     AboutController::index($all_users);
-});
-
-Http::post("/create-user", function() {
-    // Create Person
-    UserController::CreateUser();
-});
-
-Http::post("/edit-user", function() {
-    // Create Person
-    UserController::EditUser();
-});
-
-Http::get('/update-table', function() {
-    // Create User table
-
-    User::MigrateTable(function() {
-        echo Success('User table updated');
-    });
 });
