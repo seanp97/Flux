@@ -192,7 +192,7 @@ class FluxModel {
                 $propertyType = 'TEXT(65530)';
             
                 if (self::FirstProperty($className) && $propertyName === self::FirstProperty($className) && $propertyType != 'INT') {
-                    $idColumnName = $className . 'Id';
+                    $idColumnName = $className;
                     $sqlCreate .= "$idColumnName INT AUTO_INCREMENT PRIMARY KEY ";
                 }
             
