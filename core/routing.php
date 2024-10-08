@@ -6,38 +6,23 @@ class Http {
         try {
             if (isset($_SERVER['REQUEST_METHOD'])) {
                 if ($_SERVER['REQUEST_METHOD'] === "$request") {
+                    $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-                    $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
-                    $uri = Explode('/', $uri);
-                    $uri = $uri[count($uri) - 1];
-                    $uri = '/' . $uri;
+                    $pattern = preg_replace('/{(\w+)}/', '([^/]+)', $path);
+                    $pattern = '#^' . $pattern . '$#';
 
-                    $queryString = $_SERVER['QUERY_STRING'];
-
-                    parse_str($queryString, $params);
-
-                    $paramVal = reset($params);
-
-                    if($path == $uri) {
-                        if($cb) {
-                            $cb($paramVal);
+                    if (preg_match($pattern, $uri, $matches)) {
+                        if (isset($matches[1])) {
+                            $id = $matches[1];
+                            call_user_func($cb, $id);
+                        } else {
+                            call_user_func($cb);
                         }
                     }
                 }
             }
-        }
-        catch(Exception $e) {
+        } catch(Exception $e) {
             echo $e;
-        }
-    }
-
-    private static function ExtractQueryStringValue($queryString) {
-        parse_str($queryString, $params);
-    
-        if (!empty($params)) {
-            return reset($params);
-        } else {
-            return null;
         }
     }
 
@@ -65,7 +50,6 @@ class Http {
         }
     }
     
-
     static function get($path, $cb = false, $data = []) {
         self::HandleRequest($path, 'GET', $cb, $data);
     }    
