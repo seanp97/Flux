@@ -350,7 +350,7 @@ class FluxModel {
         return new self();
     }
 
-    public static function Delete() {
+    /*public static function Delete() {
         try {
             $className = get_called_class();
             self::$modelQueryBuilder .= "DELETE FROM $className ";
@@ -359,7 +359,27 @@ class FluxModel {
         catch (Exception $e) {
             throw new Exception("Error Processing Request", $e->getCode(), $e);
         }
-    } 
+    }*/
+
+    public static function Delete($value) {
+        $callingClass = get_called_class();
+        self::$modelQueryBuilder = "DELETE FROM $callingClass WHERE ";
+        $properties = get_class_vars($callingClass);
+        $first = true;
+        foreach ($properties as $propertyName => $propertyValue) {
+            if ($propertyName === 'modelQueryBuilder' || $propertyName === 'modelQueryParams') {
+                continue;
+            }
+            if (!$first) {
+                self::$modelQueryBuilder .= " OR ";
+            } else {
+                $first = false;
+            }
+            self::$modelQueryBuilder .= "$propertyName = $value";
+            self::$modelQueryParams[] = $value;
+        }
+        return new self();
+    }
 
     public static function Create($obj, $cb = false) {
         try {
