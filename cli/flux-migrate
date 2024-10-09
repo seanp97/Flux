@@ -69,67 +69,44 @@ function FirstProperty($className) {
     return null;
 }
 
-    try {
+try {
+    $className = $model;
+    $reflection = new ReflectionClass($className);
+    $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
 
-        $className = $model;
-        $reflection = new ReflectionClass($className);
-        $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
+    $tableName = strtolower($className);
+    $sqlDrop = "DROP TABLE IF EXISTS `$tableName`";
+    $sqlCreate = "CREATE TABLE `$tableName` (";
+    $columns = [];
 
-        $tableName = strtolower($className);
-        $sqlDrop = "DROP TABLE IF EXISTS $tableName";
-        $sqlCreate = "CREATE TABLE `$tableName` (";
+    foreach ($properties as $property) {
+        $propertyName = $property->getName();
+        $propertyType = GetColumnType($property->getType()->getName());
 
-        foreach ($properties as $property) {
-            $propertyName = $property->getName();
-            $propertyType = 'TEXT(65530)';
-        
-            if (FirstProperty($className) && $propertyName === FirstProperty($className) && $propertyType != 'INT') {
-                $idColumnName = $className;
-                $sqlCreate .= "$idColumnName INT AUTO_INCREMENT PRIMARY KEY ";
-            }
-
-            if ($propertyName !== FirstProperty($className)) {
-                if ($property->hasType()) {
-                    $typeName = strtolower($property->getType()->getName());
-                    $propertyType = GetColumnType($typeName);
-
-                    if ($typeName === 'date') {
-                        $propertyType = 'DATE';
-                    } elseif ($typeName === 'datetime') {
-                        $propertyType = 'DATETIME';
-                    } elseif ($typeName === 'json') {
-                        $propertyType = 'JSON';
-                    }
-                }
-
-                if ($propertyName !== FirstProperty($className)) {
-                    $sqlCreate .= ", ";
-                }
-
-                $sqlCreate .= "$propertyName $propertyType";
-            }
+        if ($propertyName === FirstProperty($className)) {
+            $columns[] = "$propertyName INT AUTO_INCREMENT PRIMARY KEY";
+        } else {
+            $columns[] = "$propertyName $propertyType";
         }
-               
-
-        $sqlCreate .= ')';
-
-        $db = new Flux();
-        $stmtDrop = $db->pdo->prepare($sqlDrop);
-        $stmtDrop->execute();
-
-        $stmtCreate = $db->pdo->prepare($sqlCreate);
-        $stmtCreate->execute();
-
-        echo $model . " table created";
-
-        return true;
-    } catch (PDOException $e) {
-        throw new Exception("Error creating table: " . $e->getMessage());
-    } catch (ReflectionException $e) {
-        throw new Exception("ReflectionException: " . $e->getMessage());
-    } catch (Exception $e) {
-        throw new Exception("Exception: " . $e->getMessage());
     }
-     catch (Exception $e) {
+
+    $sqlCreate .= implode(", ", $columns);
+    $sqlCreate .= ')';
+
+    $db = new Flux();
+    $stmtDrop = $db->pdo->prepare($sqlDrop);
+    $stmtDrop->execute();
+
+    $stmtCreate = $db->pdo->prepare($sqlCreate);
+    $stmtCreate->execute();
+
+    echo $model . " table created\n";
+
+    return true;
+} catch (PDOException $e) {
+    throw new Exception("Error creating table: " . $e->getMessage());
+} catch (ReflectionException $e) {
+    throw new Exception("ReflectionException: " . $e->getMessage());
+} catch (Exception $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
