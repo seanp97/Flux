@@ -207,53 +207,48 @@ class FluxModel {
             $tableName = strtolower($className);
             $sqlDrop = "DROP TABLE IF EXISTS $tableName";
             $sqlCreate = "CREATE TABLE `$tableName` (";
-
     
             foreach ($properties as $property) {
                 $propertyName = $property->getName();
                 $propertyType = 'TEXT(65530)';
-            
+    
                 if (self::FirstProperty($className) && $propertyName === self::FirstProperty($className) && $propertyType != 'INT') {
-                    $idColumnName = $className . 'Id';
+                    $idColumnName = $className;
                     $sqlCreate .= "$idColumnName INT AUTO_INCREMENT PRIMARY KEY ";
                 }
-            
+    
                 if ($propertyName !== self::FirstProperty($className)) {
                     if ($property->hasType()) {
-                        $propertyType = self::GetColumnType($property->getType()->getName());
+                        $typeName = strtolower($property->getType()->getName());
+                        $propertyType = self::GetColumnType($typeName);
+    
+                        if ($typeName === 'date') {
+                            $propertyType = 'DATE';
+                        } elseif ($typeName === 'datetime') {
+                            $propertyType = 'DATETIME';
+                        } elseif ($typeName === 'json') {
+                            $propertyType = 'JSON';
+                        }
                     }
-            
+    
                     if ($propertyName !== self::FirstProperty($className)) {
                         $sqlCreate .= ", ";
                     }
-            
+    
                     $sqlCreate .= "$propertyName $propertyType";
                 }
             }
-                   
     
-            $sqlCreate .= ')';
-    
-            $db = new Flux();
-            $stmtDrop = $db->pdo->prepare($sqlDrop);
-            $stmtDrop->execute();
-    
-            $stmtCreate = $db->pdo->prepare($sqlCreate);
-            $stmtCreate->execute();
+            $sqlCreate .= ");";
     
             if ($cb) {
-                $cb();
+                $cb($sqlCreate);
             }
     
-            return true;
-        } catch (PDOException $e) {
-            throw new Exception("Error creating table: " . $e->getMessage());
-        } catch (ReflectionException $e) {
-            throw new Exception("ReflectionException: " . $e->getMessage());
         } catch (Exception $e) {
-            throw new Exception("Exception: " . $e->getMessage());
+            throw new Exception($e->getMessage());
         }
-    }   
+    }
 
     private function UpdateTable($className, $cb = false) {
         self::DeleteTable($className);
