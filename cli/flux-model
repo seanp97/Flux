@@ -19,13 +19,20 @@ $content = '<?php
 // Define the file path
 $filePath = 'models/' . $filename . '.php';
 
-$file = fopen($filePath, 'w');
-
-if ($file === false) {
-    die('Error opening the file.');
+// Check if the directory exists and create it if not
+if (!is_dir('models')) {
+    mkdir('models', 0755);
 }
 
-fwrite($file, $content);
+$file = fopen($filePath, 'w');
+
+if (!$file) {
+    die("Error opening the file: $filePath");
+}
+
+if (!fwrite($file, $content)) {
+    die("Error writing to the file: $filePath");
+}
 
 fclose($file);
 
