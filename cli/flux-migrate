@@ -69,7 +69,6 @@ function FirstProperty($className) {
     return null;
 }
 
-try {
     try {
 
         $className = $model;
@@ -85,19 +84,28 @@ try {
             $propertyType = 'TEXT(65530)';
         
             if (FirstProperty($className) && $propertyName === FirstProperty($className) && $propertyType != 'INT') {
-                $idColumnName = $className . 'Id';
+                $idColumnName = $className;
                 $sqlCreate .= "$idColumnName INT AUTO_INCREMENT PRIMARY KEY ";
             }
-        
+
             if ($propertyName !== FirstProperty($className)) {
                 if ($property->hasType()) {
-                    $propertyType = GetColumnType($property->getType()->getName());
+                    $typeName = strtolower($property->getType()->getName());
+                    $propertyType = GetColumnType($typeName);
+
+                    if ($typeName === 'date') {
+                        $propertyType = 'DATE';
+                    } elseif ($typeName === 'datetime') {
+                        $propertyType = 'DATETIME';
+                    } elseif ($typeName === 'json') {
+                        $propertyType = 'JSON';
+                    }
                 }
-        
+
                 if ($propertyName !== FirstProperty($className)) {
                     $sqlCreate .= ", ";
                 }
-        
+
                 $sqlCreate .= "$propertyName $propertyType";
             }
         }
@@ -122,6 +130,6 @@ try {
     } catch (Exception $e) {
         throw new Exception("Exception: " . $e->getMessage());
     }
-} catch (Exception $e) {
+     catch (Exception $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
