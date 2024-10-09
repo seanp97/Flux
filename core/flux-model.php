@@ -198,52 +198,48 @@ class FluxModel {
         }
     }
 
-    public static function MigrateTable($cb = false) {
+public static function MigrateTable($cb = false) {
         try {
             $className = get_called_class();
             $reflection = new ReflectionClass($className);
             $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
     
             $tableName = strtolower($className);
-            $sqlDrop = "DROP TABLE IF EXISTS $tableName";
-            $sqlCreate = "CREATE TABLE `$tableName` (";
+            $sqlDrop = "DROP TABLE IF EXISTS `$tableName`";
+            $columns = [];
     
             foreach ($properties as $property) {
                 $propertyName = $property->getName();
                 $propertyType = 'TEXT(65530)';
     
-                if (self::FirstProperty($className) && $propertyName === self::FirstProperty($className) && $propertyType != 'INT') {
-                    $idColumnName = $className;
-                    $sqlCreate .= "$idColumnName INT AUTO_INCREMENT PRIMARY KEY ";
+                if (self::FirstProperty($className) && $propertyName === self::FirstProperty($className)) {
+                    $columns[] = "$propertyName INT AUTO_INCREMENT PRIMARY KEY"; 
+                    continue;
                 }
     
-                if ($propertyName !== self::FirstProperty($className)) {
-                    if ($property->hasType()) {
-                        $typeName = strtolower($property->getType()->getName());
-                        $propertyType = self::GetColumnType($typeName);
+                if ($property->hasType()) {
+                    $typeName = strtolower($property->getType()->getName());
+                    $propertyType = self::GetColumnType($typeName);
     
-                        if ($typeName === 'date') {
-                            $propertyType = 'DATE';
-                        } elseif ($typeName === 'datetime') {
-                            $propertyType = 'DATETIME';
-                        } elseif ($typeName === 'json') {
-                            $propertyType = 'JSON';
-                        }
+                    if ($typeName === 'date') {
+                        $propertyType = 'DATE';
+                    } elseif ($typeName === 'datetime') {
+                        $propertyType = 'DATETIME';
+                    } elseif ($typeName === 'json') {
+                        $propertyType = 'JSON';
                     }
-    
-                    if ($propertyName !== self::FirstProperty($className)) {
-                        $sqlCreate .= ", ";
-                    }
-    
-                    $sqlCreate .= "$propertyName $propertyType";
                 }
+    
+                $columns[] = "$propertyName $propertyType";
             }
     
-            $sqlCreate .= ");";
+            $sqlCreate = $sqlDrop . "; CREATE TABLE `$tableName` (" . implode(", ", $columns) . ");";
     
             if ($cb) {
                 $cb($sqlCreate);
             }
+    
+            return $sqlCreate;
     
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
