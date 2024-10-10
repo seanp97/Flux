@@ -33,7 +33,7 @@ Flux is a PHP-based web application that follows a modular MVC (Model-View-Contr
 
 8.  [CLI Tools](#cli-tools)
 
-9.  [Assets](#assets)
+9.  [Database Methods](#database-methods)
 
   
 
