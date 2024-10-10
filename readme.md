@@ -1,7 +1,7 @@
 
 #  Welcome to Flux 🚀
 
-documentation_with_code = """
+#  Flux Project Documentation (with Source Code)
 
 #  Flux Project Documentation (with Source Code)
 
