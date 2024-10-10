@@ -35,6 +35,8 @@ Flux is a PHP-based web application that follows a modular MVC (Model-View-Contr
 
 9.  [Database Methods](#database-methods)
 
+10.  [Helper Functions](#helper-functions) 
+
   
 
 ##  Project Structure
@@ -343,7 +345,7 @@ Now to take a look at the routes.php file to understand how we are calling these
 		FactController::destroy($id);
 	});
 
-## Helper function
+## Helper functions
 
 In Flux, we get a range of helper functions to make development easier. These methods can be called in our code.
 
