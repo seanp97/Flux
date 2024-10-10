@@ -1,17 +1,13 @@
 
 #  Welcome to Flux 🚀
 
-#  Flux Project Documentation (with Source Code)
 
 #  Flux Project Documentation (with Source Code)
-
-  
 
 ##  What is Flux?
 
-  
 
-Flux is a PHP-based web application that follows a modular MVC (Model-View-Controller) architecture. It includes various components such as controllers, models, views, routes, and core utilities to build web applications and API's.
+## Flux is a PHP-based web application that follows a modular MVC (Model-View-Controller) architecture. It includes various components such as controllers, models, views, routes, and core utilities to build web applications and API's.
 
   
 
