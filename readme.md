@@ -129,7 +129,7 @@ As you can see here in About/index.php we are setting the including the header &
 	<?php
 		
 		// Check if there are users
-		if($all_users) {]
+		if($all_users) {
 			// Check if there is more one user
 			if(is_array($all_users)) {
 				// Loop through users and output property value
