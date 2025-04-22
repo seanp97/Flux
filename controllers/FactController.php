@@ -41,7 +41,7 @@
             try {
                 $fact = Fact::ModelData();
 
-                Fact::InsertObject($fact, 'Fact');
+                Fact::Add($fact);
                 Ok($fact);
             }
             catch(Exception $e) {
